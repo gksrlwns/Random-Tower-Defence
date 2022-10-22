@@ -89,9 +89,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4939996705135754}
+  - component: {fileID: 5285491764915972575}
   - component: {fileID: -8041487938706731883}
+  - component: {fileID: 5157515175738146677}
   m_Layer: 0
-  m_Name: CannonTower
+  m_Name: TestCannonTower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,7 +115,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8041487938706731883
+--- !u!114 &5285491764915972575
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,6 +123,31 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1326093064322132}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02d99ed6d2ff5f4da31f151e897a3e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentTarget: {fileID: 0}
+  turreyHead: {fileID: 4519941387849242}
+  attackDist: 15
+  attackDamage: 0
+  shootCoolDown: 0
+  loockSpeed: 0
+  randomRot: {x: 0, y: 0, z: 0}
+  animator: {fileID: 0}
+  turretType: 3
+  muzzleMain: {fileID: 8084691688750078133}
+  muzzleSub: {fileID: 0}
+  muzzleEff: {fileID: 1497772684437746, guid: 5cb7fd22409d7a646a8cb0fda29aa16e, type: 3}
+  bullet: {fileID: 3491448414918937779, guid: 2bb04756abf00d64eadf1525fd52c6c8, type: 3}
+--- !u!114 &-8041487938706731883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326093064322132}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31812467dbb271b439f94ac58ca7a3c5, type: 3}
   m_Name: 
@@ -139,6 +166,31 @@ MonoBehaviour:
   bulletShootTr: {fileID: 8084691688750078133}
   enemiesList: []
   type: 0
+--- !u!114 &5157515175738146677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326093064322132}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4826722dedff2e40ae0b93126c12b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateSpeed: 0
+  attackRange: 0
+  turnSpeed: 0
+  attackSpeed: 0
+  damage: 0
+  timer: 0
+  target: {fileID: 0}
+  TowerRotateTr: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  shootEff: {fileID: 0}
+  bulletShootTr: {fileID: 0}
+  enemiesList: []
+  type: 1
 --- !u!1 &1414511323558576
 GameObject:
   m_ObjectHideFlags: 0

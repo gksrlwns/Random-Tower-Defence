@@ -33,9 +33,10 @@ public class Bullet : MonoBehaviour
         
         if (type == Tower.TowerType.CannonTower)
         {
+            //if(!target)
             if (isLockOn)
             {
-                //if (!target) lockOn = target;
+                if (!target) return;
                 Vector3 Vo = CalculateCatapult(target.transform.position, transform.position, 1);
 
                 transform.GetComponent<Rigidbody>().velocity = Vo;

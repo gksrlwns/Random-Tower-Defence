@@ -92,7 +92,8 @@ public class TurretAI : MonoBehaviour {
 
         for (int i = 0; i < colls.Length; i++)
         {
-            if (colls[i].tag == "Player")
+            //if (colls[i].tag == "Player")
+            if(colls[i].CompareTag("Enemy"))
             {
                 float dist = Vector3.Distance(transform.position, colls[i].transform.position);
                 if (dist < distAway)
@@ -107,7 +108,7 @@ public class TurretAI : MonoBehaviour {
     private void FollowTarget() //todo : smooth rotate
     {
         Vector3 targetDir = currentTarget.transform.position - turreyHead.position;
-        targetDir.y = 0;
+        //targetDir.y = 0;
         //turreyHead.forward = targetDir;
         if (turretType == TurretType.Single)
         {
@@ -176,12 +177,17 @@ public class TurretAI : MonoBehaviour {
     {
         if (turretType == TurretType.Catapult)
         {
-            lockOnPos = go.transform;
+            //lockOnPos = go.transform;
 
+            //Instantiate(muzzleEff, muzzleMain.transform.position, muzzleMain.rotation);
+            //GameObject missleGo = Instantiate(bullet, muzzleMain.transform.position, muzzleMain.rotation);
+            //Projectile projectile = missleGo.GetComponent<Projectile>();
+            //projectile.target = lockOnPos;
             Instantiate(muzzleEff, muzzleMain.transform.position, muzzleMain.rotation);
-            GameObject missleGo = Instantiate(bullet, muzzleMain.transform.position, muzzleMain.rotation);
-            Projectile projectile = missleGo.GetComponent<Projectile>();
-            projectile.target = lockOnPos;
+            var bulletClone = Instantiate(bullet, muzzleMain.position, muzzleMain.rotation);
+            Bullet bullets = bulletClone.GetComponent<Bullet>();
+            bullets.Seek(go.transform);
+            //bullets.Damege(damage);
         }
         else if(turretType == TurretType.Dual)
         {

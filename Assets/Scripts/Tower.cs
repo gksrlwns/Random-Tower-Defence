@@ -19,7 +19,7 @@ public class Tower : MonoBehaviour
     
     [Header("타워 능력")]
     public float rotateSpeed;
-    public float range; //타워의 사거리
+    public float attackRange; //타워의 사거리
     public float turnSpeed;// 10f
     public float attackSpeed;
     public int damage;
@@ -51,7 +51,7 @@ public class Tower : MonoBehaviour
         timer = 0f;
         target = GetComponent<Transform>();
         rotateSpeed = 60f;
-        range = 12f;
+        //range = 12f;
         //turnSpeed = 10f;
     }
 
@@ -78,25 +78,39 @@ public class Tower : MonoBehaviour
     }
     void TargetSearch()
     {
+        //foreach문은 업데이트 함수에서 사용하지 않는게 좋다.
+        Collider[] colliders = Physics.OverlapSphere(transform.position, attackRange);
         float shortesDistance = Mathf.Infinity;
-        Enemy nearEnemy = null;
+        GameObject nearEnemy = null;
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if(colliders[i].CompareTag("Enemy"))
+            {
+                float distanceToenemy = Vector3.Distance(transform.position, colliders[i].transform.position);
+                if (distanceToenemy < shortesDistance)
+                {
+                    shortesDistance = distanceToenemy;
+                    nearEnemy = colliders[i].gameObject;
+                }
+            }
+        }
         //Enemy[] enemies = FindObjectsOfType<Enemy>();
 
         //enemiesList
-        for (int i = 0; i < enemiesList.Count; i++)
-        {
-            if (enemiesList[i] == null) continue;
-            float distanceToenemy = Vector3.Distance(transform.position, enemiesList[i].transform.position);
-            if (distanceToenemy < shortesDistance)
-            {
-                shortesDistance = distanceToenemy;
-                nearEnemy = enemiesList[i];
-            }
-        }
+        //for (int i = 0; i < enemiesList.Count; i++)
+        //{
+        //    if (enemiesList[i] == null) continue;
+        //    float distanceToenemy = Vector3.Distance(transform.position, enemiesList[i].transform.position);
+        //    if (distanceToenemy < shortesDistance)
+        //    {
+        //        shortesDistance = distanceToenemy;
+        //        nearEnemy = enemiesList[i];
+        //    }
+        //}
 
 
         // 가까운 적 + 범위 안 **추가로 적이 죽지않았는지에 대한 bool 값으로 때리던 적 유지?
-        if (nearEnemy && shortesDistance <= range) 
+        if (nearEnemy && shortesDistance <= attackRange) 
         {
             target = nearEnemy.transform;
         }
@@ -104,6 +118,10 @@ public class Tower : MonoBehaviour
         {
             target = null;
         }
+        //else
+        //{
+        //    target = null;
+        //}
     }
 
     void TowerRotation()
@@ -132,11 +150,11 @@ public class Tower : MonoBehaviour
     {
         if(type == TowerType.CannonTower)
         {
-            lockOnTr = attack;
+            //lockOnTr = attack;
             Instantiate(shootEff, bulletShootTr.transform.position, bulletShootTr.rotation);
             var bulletClone = Instantiate(bulletPrefab, bulletShootTr.position, bulletShootTr.rotation);
             Bullet bullet = bulletClone.GetComponent<Bullet>();
-            bullet.Seek(lockOnTr);
+            bullet.Seek(attack);
             bullet.Damege(damage);
         }
         else if(type == TowerType.MachineGunTower)
@@ -145,7 +163,7 @@ public class Tower : MonoBehaviour
             var bulletClone = Instantiate(bulletPrefab, bulletShootTr.position, bulletShootTr.rotation);
             Bullet bullet = bulletClone.GetComponent<Bullet>();
             //bullet.Seek(target);
-            bullet.Seek(target);
+            bullet.Seek(attack);
             bullet.Damege(damage);
         }
         
@@ -159,16 +177,16 @@ public class Tower : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, range);
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            enemiesList.Add(other.GetComponent<Enemy>());
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Enemy"))
+    //    {
+    //        enemiesList.Add(other.GetComponent<Enemy>());
+    //    }
+    //}
 
 }
