@@ -5,12 +5,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerData
-{
-    int stage;
-    int money;
-    int restLife;   
-}
 
 public class TowerData
 {
@@ -21,9 +15,10 @@ public class TowerData
 public class GameManager : MonoBehaviour
 {
     [Header("게임 영향")]
-    public int restLife = 20;
-    public int money = 500;
-    public int maxMonsterNum = 50;
+    public int restLife;
+    public int money;
+    public int maxMonsterNum;
+    public int stage;
     [Header("시간")]
     public float spawnTimer;
     public float StageTimer;
@@ -86,7 +81,7 @@ public class GameManager : MonoBehaviour
 
     public enum StageEnum
     {
-        stage1 = 0,
+        stage1 = 1,
         stage2,
         stage3,
         clear,
@@ -123,7 +118,9 @@ public class GameManager : MonoBehaviour
         //node_TC2 = 0;
         monsterNum = 0;
         //maxMonsterNum = 50;
-        //money = 500;
+        money = BackEndManager.instance.nowPlayerData.money;
+        restLife = BackEndManager.instance.nowPlayerData.restLife;
+        _stageEnum = (StageEnum)BackEndManager.instance.nowPlayerData.stage;
         StageTimer = 0;
         restTimer = 30f;
         isCreate = false;
@@ -137,7 +134,8 @@ public class GameManager : MonoBehaviour
         {
             nodes[i].enabled = false;
         }
-        
+        BackEndManager.instance.SaveFile();
+
     }
 
     // Update is called once per frame
@@ -158,7 +156,7 @@ public class GameManager : MonoBehaviour
             //for문 없이
             if (_stageEnum < StageEnum.clear)
             {
-                SpawnEnemy(enemyPrefabs[(int)_stageEnum]);
+                SpawnEnemy(enemyPrefabs[(int)_stageEnum - 1]);
                 if (clearMonsterNum >= maxMonsterNum)
                 {
                     isStageClear = true;
@@ -169,6 +167,8 @@ public class GameManager : MonoBehaviour
                     monsterNum = 0;
                     stageTimeText.text = "";
                     spawnTimer = 0f;
+                    PlayerDataSave();
+                    BackEndManager.instance.SaveFile();
                     //InsertData();
                     //PlayerPrefsSetStage();
                 }
@@ -368,6 +368,13 @@ public class GameManager : MonoBehaviour
         TowerTr.Clear();
 
         
+    }
+
+    void PlayerDataSave()
+    {
+        BackEndManager.instance.nowPlayerData.money = money;
+        BackEndManager.instance.nowPlayerData.restLife = restLife;
+        BackEndManager.instance.nowPlayerData.stage = (int)_stageEnum;
     }
     public void InsertData()
     {

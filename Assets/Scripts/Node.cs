@@ -52,7 +52,7 @@ public class Node : MonoBehaviour
             print("업그레이드된 타워가 있습니다");
             return;
         }
-        if (!tower && gameManager.isCreate == true &&gameManager.money >= 50)
+        if (!tower && gameManager.isCreate == true && gameManager.money >= 50)
         {
             RandomPrefabs();
             if(towerType == Tower.TowerType.CannonTower)
@@ -81,7 +81,7 @@ public class Node : MonoBehaviour
             gameManager.money -= 50;
             
         }
-        if(!tower && gameManager.isCreate == true &&gameManager.money < 50)
+        if(!tower && gameManager.isCreate == true && gameManager.money < 50)
         {
             print("돈이 부족합니다.");
         }
@@ -98,7 +98,7 @@ public class Node : MonoBehaviour
             //    gameManager.TowerTr2.Remove(tower.transform);
             //    gameManager.node_TC2--;
             //}
-            gameManager.money += 18;
+           gameManager.money += 18;
             Destroy(tower);
             
         }
