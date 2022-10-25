@@ -5,13 +5,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
-public class TowerData
-{
-    Vector3 towerPosition;
-    int towerType;
-}
-
 public class GameManager : MonoBehaviour
 {
     [Header("게임 영향")]
@@ -19,6 +12,8 @@ public class GameManager : MonoBehaviour
     public int money;
     public int maxMonsterNum;
     public int stage;
+    public int towerCount;
+    public int tower2Count;
     [Header("시간")]
     public float spawnTimer;
     public float StageTimer;
@@ -26,13 +21,13 @@ public class GameManager : MonoBehaviour
     [Header("몬스터")]
     public int monsterNum = 0;
     public int clearMonsterNum;
-    public Transform enemyTr;
+    public Transform enemy_Tr;
     public GameObject[] enemyPrefabs;
     //public GameObject enemyPrefab1;
     //public GameObject enemyPrefab2;
     //public GameObject enemyPrefab3;
     [Header("타워빌드")]
-    public Transform towerTr;
+    public Transform tower_Tr;
     private Node[] nodes;
     public GameObject Tower2Clone;
 
@@ -99,14 +94,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        //if (PlayerPrefs.HasKey("stage"))
-        //{
-        //    PlayerPrefsGetStage();
-        //}
-        //else
-        //{
-        //    _stageEnum = StageEnum.stage1;
-        //}
+        
         _playerPrefsVector3 = new PlayerPrefsVector3();
         TowerTr = new List<Transform>[(int)Tower.TowerType.kindnum];
         for (int i = 0; i < TowerTr.Length; i++ )
@@ -114,10 +102,9 @@ public class GameManager : MonoBehaviour
             TowerTr[i] = new List<Transform>();
         }
         isPannelMove = false;
-        //node_TC1 = 0;
-        //node_TC2 = 0;
+        
         monsterNum = 0;
-        //maxMonsterNum = 50;
+        
         money = BackEndManager.instance.nowPlayerData.money;
         restLife = BackEndManager.instance.nowPlayerData.restLife;
         _stageEnum = (StageEnum)BackEndManager.instance.nowPlayerData.stage;
@@ -142,7 +129,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (isGameEnd == true) return;
-        //print($"{(int)_stageEnum}");
+        
         if(isPause == true)
         {
             this.enabled = false;
@@ -152,15 +139,14 @@ public class GameManager : MonoBehaviour
         if (isStageClear == false)
         {
             StageTimer += Time.deltaTime;
-            //stageTimeText.text = StageTimer.ToString("00");
-            //for문 없이
+            
             if (_stageEnum < StageEnum.clear)
             {
                 SpawnEnemy(enemyPrefabs[(int)_stageEnum - 1]);
                 if (clearMonsterNum >= maxMonsterNum)
                 {
                     isStageClear = true;
-                    //_stageEnum = StageEnum.stage2;
+                    
                     _stageEnum++;
                     StageTimer = 0;
                     clearMonsterNum = 0;
@@ -169,89 +155,15 @@ public class GameManager : MonoBehaviour
                     spawnTimer = 0f;
                     PlayerDataSave();
                     BackEndManager.instance.SaveFile();
-                    //InsertData();
-                    //PlayerPrefsSetStage();
+                    
                 }
             }
             if (_stageEnum == StageEnum.clear)
             {
                 GameEnd();
-                //break;
+                
             }
-            //for (int i = 0; i < (int)StageEnum.count; i++)
-            //{
-            //    if(i < (int)StageEnum.count - 1 && (int)_stageEnum == i)
-            //    {
-            //        SpawnEnemy(enemyPrefabs[i]);
-            //        if (clearMonsterNum >= maxMonsterNum)
-            //        {
-            //            isStageClear = true;
-            //            //_stageEnum = StageEnum.stage2;
-            //            _stageEnum++;
-            //            StageTimer = 0;
-            //            clearMonsterNum = 0;
-            //            monsterNum = 0;
-            //            stageTimeText.text = "";
-            //            spawnTimer = 0f;
-            //        }
-            //    }
-            //    else if((int)_stageEnum == (int)StageEnum.count - 1)
-            //    {
-            //        GameEnd();
-            //        //break;
-            //    }
-            //}
-            //switch (_stageEnum)
-            //{
-            //    case StageEnum.stage1:
-            //        {
-            //            SpawnEnemy(enemyPrefab1);
-            //            if (clearMonsterNum >= maxMonsterNum)
-            //            {
-            //                isStageClear = true;
-            //                _stageEnum = StageEnum.stage2;
-            //                StageTimer = 0;
-            //                clearMonsterNum = 0;
-            //                monsterNum = 0;
-            //                stageTimeText.text = "";
-            //                spawnTimer = 0f;
-            //            }
-            //            break;
-            //        }
-            //    case StageEnum.stage2:
-            //        {
-            //            SpawnEnemy(enemyPrefab2);
-            //            if (clearMonsterNum >= maxMonsterNum)
-            //            {
-            //                isStageClear = true;
-            //                _stageEnum = StageEnum.stage3;
-            //                StageTimer = 0;
-            //                clearMonsterNum = 0;
-            //                monsterNum = 0;
-            //                stageTimeText.text = "";
-            //                spawnTimer = 0f;
-            //            }
-            //            break;
-            //        }
-            //    case StageEnum.stage3:
-            //        {
-            //            SpawnEnemy(enemyPrefab3);
-            //            if (clearMonsterNum >= maxMonsterNum)
-            //            {
-            //                isStageClear = false;
-            //                _stageEnum = StageEnum.clear;
-            //                StageTimer = 0;
-            //                stageTimeText.text = "";
-            //                spawnTimer = 0f;
-            //            }
-            //            break;
-            //        }
-            //    case StageEnum.clear:
-            //        {
-            //            GameEnd();
-            //            break;
-            //        }
-            //}
+            
         }
         else if (isStageClear == true && monsterNum == 0)
         {
@@ -265,7 +177,7 @@ public class GameManager : MonoBehaviour
             }
         }
         moneyText.text = money.ToString();
-        restLifeText.text = $"{restLife.ToString()} / 20";// currentRestLife로 바꿀것
+        restLifeText.text = $"{restLife.ToString()} / 20";
         if(restLife == 0)
         {
             GameOver();
@@ -283,7 +195,7 @@ public class GameManager : MonoBehaviour
             if (TowerTr[i].Count >= 3)
             {
                 Debug.Log($"{((TowerName)i)} 3개 삭제 후 업그레이드");
-                TowerUpgrade(Tower2Prefab[i], TowerTr[i]);
+                TowerUpgrade(Tower2Prefab[i], TowerTr[i], i);
             }
         }
 
@@ -330,26 +242,27 @@ public class GameManager : MonoBehaviour
         {
            spawnTimer = 0f;
            if (monsterNum == maxMonsterNum) return;
-           enemy = Instantiate(enemyPrefab,  Startobj.transform.position + EnemyPosition, Startobj.transform.rotation , enemyTr);
+           enemy = Instantiate(enemyPrefab,  Startobj.transform.position + EnemyPosition, Startobj.transform.rotation , enemy_Tr);
            monsterNum++;
            
         }
     }
-    void TowerUpgrade(GameObject TowerPrefab, List<Transform> TowerTr)
+    void TowerUpgrade(GameObject TowerPrefab, List<Transform> TowerTr, int num)
     {
-
+        //업그레이드타워타입 설정
+        num += 2;
         for (int i = 0; i < nodes.Length; i++)
         {
             //Destroy(nodes[i].tower);
-            if((nodes[i].transform.position + nodes[i].TowerPosition)== TowerTr[0].position)
+            if((nodes[i].transform.position + nodes[i].positionOffset)== TowerTr[0].position)
             {
                 Destroy(nodes[i].tower);
             }
-            if ((nodes[i].transform.position + nodes[i].TowerPosition) == TowerTr[1].position)
+            if ((nodes[i].transform.position + nodes[i].positionOffset) == TowerTr[1].position)
             {
                 Destroy(nodes[i].tower);
             }
-            if ((nodes[i].transform.position + nodes[i].TowerPosition) == TowerTr[2].position)
+            if ((nodes[i].transform.position + nodes[i].positionOffset) == TowerTr[2].position)
             {
                 Destroy(nodes[i].tower);
             }
@@ -359,9 +272,11 @@ public class GameManager : MonoBehaviour
         Tower2Clone = Instantiate(TowerPrefab, TowerTr[0].position, TowerTr[0].rotation);
         for (int i=0; i< nodes.Length; i++)
         {
-            if ((nodes[i].transform.position + nodes[i].TowerPosition) == TowerTr[0].position)
+            if ((nodes[i].transform.position + nodes[i].positionOffset) == TowerTr[0].position)
             {
                 nodes[i].tower2 = Tower2Clone;
+                //업그레이드타워타입 설정
+                nodes[i].towerTypeNum = num;
             }
         }
         
@@ -375,37 +290,34 @@ public class GameManager : MonoBehaviour
         BackEndManager.instance.nowPlayerData.money = money;
         BackEndManager.instance.nowPlayerData.restLife = restLife;
         BackEndManager.instance.nowPlayerData.stage = (int)_stageEnum;
-    }
-    public void InsertData()
-    {
-        Param param = new Param();
-        param.Add("money", money);
-        param.Add("life", restLife);
-        param.Add("stage", (int)_stageEnum);
-        var bro = Backend.GameInfo.Insert("PlayerData", param);
-        if (bro.IsSuccess())
+        for(int i = 0; i < nodes.Length; i++)
         {
-            print("데이터 삽입 성공");
-            print($"{(int)_stageEnum},{restLife},{money}");
-        }
-        else
-        {
-            print("실패");
-            print(bro.GetMessage());
+            if(nodes[i].tower || nodes[i].tower2)
+            {
+                TowerData data = new TowerData(nodes[i].towerTypeNum, nodes[i].transform.position + nodes[i].positionOffset);
+                BackEndManager.instance.nowPlayerData.towers.Add(data);
+                    //(new TowerData() { Towertype = nodes[i].towerTypeNum, TowerPosition = nodes[i].transform.position + nodes[i].positionOffset });
+                print($"{nodes[i].towerTypeNum}, { nodes[i].transform.position + nodes[i].positionOffset}");
+            }
         }
     }
-    void PlayerPrefsSetStage()
+
+
+    //타워 갯수 측정
+    public void TowerCount()
     {
-        PlayerPrefs.SetInt("stage", (int)_stageEnum);
-        PlayerPrefs.SetInt("money", money);
-        PlayerPrefs.SetInt("restLife", restLife);
-        print($"스테이지 :{(int)_stageEnum}, {money}, {restLife}");
-    }
-    void PlayerPrefsGetStage()
-    {
-        PlayerPrefs.GetInt("stage");
-        PlayerPrefs.GetInt("money");
-        PlayerPrefs.GetInt("restLife");
+        towerCount = tower2Count = 0;
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if(nodes[i].tower)
+            {
+                towerCount++;
+            }
+            if(nodes[i].tower2)
+            {
+                tower2Count++;
+            }
+        }
     }
 
     public void TowerCreate()
@@ -449,8 +361,6 @@ public class GameManager : MonoBehaviour
     public void Retry()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        PlayerPrefsGetStage();
-
     }
     public void PanelAnimationBtn()
     {

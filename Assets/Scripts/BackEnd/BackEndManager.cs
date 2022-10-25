@@ -3,11 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+[System.Serializable]
+public class TowerData
+{
+    public int Towertype;
+    public Vector3 TowerPosition;
+    public TowerData(int type, Vector3 vec3)
+    {
+        Towertype = type;
+        TowerPosition = vec3;
+    }
+}
+
 public class PlayerData
 {
     public int stage = 1;
     public int money = 500;
     public int restLife = 20;
+    public List<TowerData> towers = new List<TowerData>();
+    
 }
 public class BackEndManager : MonoBehaviour
 {

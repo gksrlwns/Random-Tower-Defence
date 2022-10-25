@@ -11,7 +11,9 @@ using UnityEngine;
 public enum TowerName
 {
     대포타워 = 0,
-    공속타워
+    공속타워,
+    업그레이드대포타워,
+    업그레이드공속타워
 }
 
 public class Tower : MonoBehaviour

@@ -450,10 +450,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   saveFilePanel: {fileID: 1283878398}
-  playerDataObj: {fileID: 1163193786}
-  stageText: {fileID: 247836665}
-  restMoneyText: {fileID: 817966901}
-  restLifeText: {fileID: 1899664403}
+  playerDataObj:
+  - {fileID: 1163193786}
+  - {fileID: 76139569}
+  - {fileID: 736338061}
+  stageText:
+  - {fileID: 247836665}
+  - {fileID: 1139233411}
+  - {fileID: 1180121731}
+  restMoneyText:
+  - {fileID: 817966901}
+  - {fileID: 1180230838}
+  - {fileID: 1786750730}
+  restLifeText:
+  - {fileID: 1899664403}
+  - {fileID: 661437973}
+  - {fileID: 464351320}
   slotText:
   - {fileID: 837128222}
   - {fileID: 2129478008}
@@ -466,7 +478,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 344880841}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 953.25916, y: 736.0248, z: -58.392876}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

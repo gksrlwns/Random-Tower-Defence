@@ -11,8 +11,8 @@ public class Node : MonoBehaviour
     public GameObject tower2;
     public GameObject[] TowerPrefabs;
     public GameManager gameManager;
-    public Vector3 TowerPosition;
-    public int nodeIndex = 0;
+    public Vector3 positionOffset;
+    public int towerTypeNum;
     Tower.TowerType towerType;
     //TowerKind TowerKindNum;
 
@@ -63,8 +63,9 @@ public class Node : MonoBehaviour
             {
                 print($"{TowerName.공속타워} 생성");
             }
-            tower = Instantiate(TowerPrefabs[(int)towerType], transform.position + TowerPosition, transform.rotation , gameManager.towerTr);
-            
+            tower = Instantiate(TowerPrefabs[(int)towerType], transform.position + positionOffset, transform.rotation , gameManager.tower_Tr);
+            //TowerDataType 구분
+            towerTypeNum = (int)towerType;
 
             gameManager.TowerTr[(int)towerType].Add(tower.transform);
 
