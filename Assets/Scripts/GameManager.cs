@@ -48,8 +48,6 @@ public class GameManager : MonoBehaviour
     public bool isPause;
     public Button mainBtn;
     public Button puaseBtn;
-    private GameObject enemy;
-    private CameraController _cameraController;   
     public GameObject Startobj;
     public GameObject Endobj;
     public GameObject PanelObj;
@@ -69,7 +67,6 @@ public class GameManager : MonoBehaviour
     public Sprite pauseImage;
     public Sprite resumeImage;
     public Sprite restImgae;
-    public PlayerPrefsVector3 _playerPrefsVector3;
     
     
     //public Tower.TowerKind towerKind;
@@ -88,23 +85,13 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         nodes = FindObjectsOfType<Node>();
-        //_cameraController = FindObjectOfType<CameraController>();
         anim = PanelObj.GetComponent<Animation>();
 
     }
     void Start()
     {
-        
-        _playerPrefsVector3 = new PlayerPrefsVector3();
-        TowerTr = new List<Transform>[(int)Tower.TowerType.kindnum];
-        for (int i = 0; i < TowerTr.Length; i++ )
-        {
-            TowerTr[i] = new List<Transform>();
-        }
         isPannelMove = false;
-        
         monsterNum = 0;
-        
         money = BackEndManager.instance.nowPlayerData.money;
         restLife = BackEndManager.instance.nowPlayerData.restLife;
         _stageEnum = (StageEnum)BackEndManager.instance.nowPlayerData.stage;
@@ -116,7 +103,6 @@ public class GameManager : MonoBehaviour
         isPause = false;
         _stageEnum = StageEnum.stage1;
         print($"{(int)_stageEnum}");
-        //_cameraController.enabled = true;
         for (int i = 0; i < nodes.Length; i++)
         {
             nodes[i].enabled = false;
@@ -189,29 +175,6 @@ public class GameManager : MonoBehaviour
                 nodes[i].enabled = true;
             }
         }
-
-        for(int i = 0; i < TowerTr.Length; i++)
-        {
-            if (TowerTr[i].Count >= 3)
-            {
-                Debug.Log($"{((TowerName)i)} 3개 삭제 후 업그레이드");
-                TowerUpgrade(Tower2Prefab[i], TowerTr[i], i);
-            }
-        }
-
-        //if(TowerTr1.Count >= 3)
-        //{
-        //    Debug.Log($"대포타워 3개 삭제 후 업그레이드");
-        //    TowerUpgrade(Tower2Prefab1, TowerTr1);
-        //    //node_TC1 = 0;
-        //}
-        //if (TowerTr2.Count >= 3)
-        //{
-        //    Debug.Log("공속타워 3개 삭제 후 업그레이드");
-        //    TowerUpgrade(Tower2Prefab2, TowerTr2);
-        //    //node_TC2 = 0;
-        //}
-
     }
 
     void GameOver()
@@ -220,7 +183,6 @@ public class GameManager : MonoBehaviour
         isGameEnd = true;
         isCreate = false;
         isDelete = false;
-        //_cameraController.enabled = false;
 
     }
     void GameEnd()
@@ -229,7 +191,6 @@ public class GameManager : MonoBehaviour
         isGameEnd = true;
         isCreate = false;
         isDelete = false;
-        //_cameraController.enabled = false;
     }
     
 
@@ -242,47 +203,10 @@ public class GameManager : MonoBehaviour
         {
            spawnTimer = 0f;
            if (monsterNum == maxMonsterNum) return;
-           enemy = Instantiate(enemyPrefab,  Startobj.transform.position + EnemyPosition, Startobj.transform.rotation , enemy_Tr);
+           Instantiate(enemyPrefab,  Startobj.transform.position + EnemyPosition, Startobj.transform.rotation , enemy_Tr);
            monsterNum++;
            
         }
-    }
-    void TowerUpgrade(GameObject TowerPrefab, List<Transform> TowerTr, int num)
-    {
-        //업그레이드타워타입 설정
-        num += 2;
-        for (int i = 0; i < nodes.Length; i++)
-        {
-            //Destroy(nodes[i].tower);
-            if((nodes[i].transform.position + nodes[i].positionOffset)== TowerTr[0].position)
-            {
-                Destroy(nodes[i].tower);
-            }
-            if ((nodes[i].transform.position + nodes[i].positionOffset) == TowerTr[1].position)
-            {
-                Destroy(nodes[i].tower);
-            }
-            if ((nodes[i].transform.position + nodes[i].positionOffset) == TowerTr[2].position)
-            {
-                Destroy(nodes[i].tower);
-            }
-            
-            
-        }
-        Tower2Clone = Instantiate(TowerPrefab, TowerTr[0].position, TowerTr[0].rotation);
-        for (int i=0; i< nodes.Length; i++)
-        {
-            if ((nodes[i].transform.position + nodes[i].positionOffset) == TowerTr[0].position)
-            {
-                nodes[i].tower2 = Tower2Clone;
-                //업그레이드타워타입 설정
-                nodes[i].towerTypeNum = num;
-            }
-        }
-        
-        TowerTr.Clear();
-
-        
     }
 
     void PlayerDataSave()
@@ -292,16 +216,13 @@ public class GameManager : MonoBehaviour
         BackEndManager.instance.nowPlayerData.stage = (int)_stageEnum;
         for(int i = 0; i < nodes.Length; i++)
         {
-            if(nodes[i].tower || nodes[i].tower2)
+            if(nodes[i].standardTower || nodes[i].upgradeTower)
             {
-                TowerData data = new TowerData(nodes[i].towerTypeNum, nodes[i].transform.position + nodes[i].positionOffset);
+                TowerData data = new TowerData(nodes[i].towerTypeNum, nodes[i].GetNodePosition());
                 BackEndManager.instance.nowPlayerData.towers.Add(data);
-                    //(new TowerData() { Towertype = nodes[i].towerTypeNum, TowerPosition = nodes[i].transform.position + nodes[i].positionOffset });
-                print($"{nodes[i].towerTypeNum}, { nodes[i].transform.position + nodes[i].positionOffset}");
             }
         }
     }
-
 
     //타워 갯수 측정
     public void TowerCount()
@@ -309,11 +230,11 @@ public class GameManager : MonoBehaviour
         towerCount = tower2Count = 0;
         for (int i = 0; i < nodes.Length; i++)
         {
-            if(nodes[i].tower)
+            if(nodes[i].standardTower)
             {
                 towerCount++;
             }
-            if(nodes[i].tower2)
+            if(nodes[i].upgradeTower)
             {
                 tower2Count++;
             }
@@ -362,6 +283,7 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
     public void PanelAnimationBtn()
     {
         isPannelMove = !isPannelMove;

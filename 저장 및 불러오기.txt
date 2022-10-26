@@ -1,0 +1,22 @@
+https://adaid.tistory.com/36
+https://charotiti9.github.io/devlog/Unity-Save-Data.html
+PlayerPrefs(플레이어 세팅, 게임 진행도), 
+ScriptableObject(게임 자체 데이터 저장), 
+Binary Formatter(로컬 게임플레이 데이터 저장), 
+XML
+
+타워 위치, 남은 목숨, 남은 돈, 현재 스테이지
+
+https://unity-programmer.tistory.com/20
+vector3를 함수를 통해 float로 변환
+
+
+https://luv-n-interest.tistory.com/774
+스태틱관련 공부
+
+
+https://velog.io/@kaka0804/%EC%9C%A0%EB%8B%88%ED%8B%B0-json%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EC%95%84%EC%9D%B4%ED%85%9C-%EC%A0%80%EC%9E%A5
+리스트 Json 저장
+
+
+업그레이드를 위한 각 타워의 List<T>, 타워 갯수를 세기위해 Instantiate node에 초기화

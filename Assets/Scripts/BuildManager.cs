@@ -2,23 +2,122 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//[System.Serializable]
+//public class TowerPrefabs
+//{
+//    public GameObject[] standardPrefabs;
+//    public GameObject[] upgradePrefanbs;
+//}
+
 public class BuildManager : MonoBehaviour
 {
+    //public static BuildManager instance;
+    public GameObject[] towerPrefabs;
+    public List<Vector3>[] towerTrs;
+    private GameManager _gameManager;
+    private Node[] nodes;
+
+    Tower.TowerType towerType;
     
     private void Awake()
     {
-        //if(instance)
-        //{
-        //    print("BuildManager가 하나 더 있습니다");
-        //    return;
-        //}
-        //instance = this;
+        _gameManager = FindObjectOfType<GameManager>();
+        nodes = FindObjectsOfType<Node>();
     }
-    public GameObject StandardTowerPrefab;
     private void Start()
     {
-        TowerToBuild = StandardTowerPrefab;
+        towerTrs = new List<Vector3>[(int)Tower.TowerType.kindnum];
+        for (int i = 0; i < towerTrs.Length; i++)
+        {
+            towerTrs[i] = new List<Vector3>();
+        }
+        foreach (var tower in BackEndManager.instance.nowPlayerData.towers)
+        {
+            if (tower.Towertype < 2)
+            {
+                towerTrs[tower.Towertype].Add(tower.TowerPosition);
+            }
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                nodes[i].standardTower = Instantiate(towerPrefabs[tower.Towertype], tower.TowerPosition, Quaternion.identity);
+                break;
+            }
+            
+            //for (int i = 0; i < nodes.Length; i++)
+            //{
+            //    if (nodes[i].standardTower) return;
+            //    //nodes[i].standardTower = Instantiate(towerPrefabs[tower.Towertype], tower.TowerPosition, Quaternion.identity);
+            //}
+        }
     }
-    private GameObject TowerToBuild;
-    
+
+    private void Update()
+    {
+        for (int i = 0; i < towerTrs.Length; i++)
+        {
+            if (towerTrs[i].Count >= 3)
+            {
+                Debug.Log($"{((TowerName)i)} 3개 삭제 후 업그레이드");
+                TowerUpgrade(towerPrefabs[i+2], towerTrs[i], i);
+            }
+        }
+    }
+    public void BuildStandardTower(Node node)
+    {
+        RandomPrefabs();
+        if (towerType == Tower.TowerType.CannonTower)
+        {
+            print($"{TowerName.대포타워} 생성");
+        }
+        else
+        {
+            print($"{TowerName.공속타워} 생성");
+        }
+        GameObject tower = Instantiate(towerPrefabs[(int)towerType], node.GetNodePosition(), Quaternion.identity);
+        node.standardTower = tower;
+        node.towerTypeNum = (int)towerType;
+        towerTrs[(int)towerType].Add(node.standardTower.transform.position);
+    }
+
+    public void DemolishStandardTower(Node node)
+    {
+        towerTrs[(int)towerType].Remove(node.standardTower.transform.position);
+    }
+
+    void RandomPrefabs()
+    {
+        towerType = (Tower.TowerType)Random.Range(0, towerPrefabs.Length - 2);
+        //return TowerKindNum;
+    }
+    void TowerUpgrade(GameObject towerPrefab, List<Vector3> towerTrs, int num)
+    {
+        num += 2;
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if(nodes[i].GetNodePosition() == towerTrs[0])
+            {
+                Destroy(nodes[i].standardTower);
+            }
+            if (nodes[i].GetNodePosition() == towerTrs[1])
+            {
+                Destroy(nodes[i].standardTower);
+            }
+            if (nodes[i].GetNodePosition() == towerTrs[2])
+            {
+                Destroy(nodes[i].standardTower);
+            }
+
+        }
+        GameObject upgradeTower = Instantiate(towerPrefab, towerTrs[0], Quaternion.identity);
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if(nodes[i].GetNodePosition() == towerTrs[0])
+            {
+                nodes[i].standardTower = upgradeTower;
+                nodes[i].towerTypeNum = num;
+            }
+        }
+        towerTrs.Clear();
+    }
+
 }
