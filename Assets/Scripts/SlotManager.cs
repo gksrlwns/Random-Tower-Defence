@@ -12,12 +12,21 @@ public class SlotManager : MonoBehaviour
     public Text[] stageText;
     public Text[] restMoneyText;
     public Text[] restLifeText;
+    public Text[] towerCountText;
+    private int[] towerCount;
+
+    TowerName towerName;
 
     public Text[] slotText;
 
     bool[] isSlot = new bool[3];
     void Start()
     {
+        towerCount = new int[4];
+        for (int i = 0; i < towerCount.Length; i++)
+        {
+            towerCount[i] = 0;
+        }
         for (int i = 0; i < isSlot.Length; i++)
         {
             if (File.Exists(BackEndManager.instance.path + $"{i}") == true)
@@ -59,6 +68,19 @@ public class SlotManager : MonoBehaviour
         stageText[num].text = $"현재 스테이지 : " + BackEndManager.instance.nowPlayerData.stage.ToString();
         restLifeText[num].text = $"남은 목숨 : " + BackEndManager.instance.nowPlayerData.restLife.ToString();
         restMoneyText[num].text = $"남은 돈 : " + BackEndManager.instance.nowPlayerData.money.ToString();
+
+        foreach (var tower in BackEndManager.instance.nowPlayerData.towers)
+        {
+            towerCount[tower.Towertype] = towerCount[tower.Towertype] + 1;
+            if (num == 0)
+            {
+                towerCountText[num + tower.Towertype].text = towerCount[tower.Towertype].ToString();
+            }
+            else
+            {
+                towerCountText[(num * 4) + tower.Towertype].text = towerCount[tower.Towertype].ToString();
+            }
+        }
     }
     void GoGameScene()
     {

@@ -44,11 +44,11 @@ public class Node : MonoBehaviour
             print("타워가 있습니다");
             return;
         }
-        if (upgradeTower && _gameManager.isCreate == true)
-        {
-            print("업그레이드된 타워가 있습니다");
-            return;
-        }
+        //if (upgradeTower && _gameManager.isCreate == true)
+        //{
+        //    print("업그레이드된 타워가 있습니다");
+        //    return;
+        //}
         if (!standardTower && _gameManager.isCreate == true && _gameManager.money >= 50)
         {
             //RandomPrefabs();

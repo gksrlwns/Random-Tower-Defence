@@ -27,6 +27,10 @@ public class BuildManager : MonoBehaviour
     private void Start()
     {
         towerTrs = new List<Vector3>[(int)Tower.TowerType.kindnum];
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            Destroy(nodes[i].standardTower);
+        }
         for (int i = 0; i < towerTrs.Length; i++)
         {
             towerTrs[i] = new List<Vector3>();
@@ -39,8 +43,13 @@ public class BuildManager : MonoBehaviour
             }
             for (int i = 0; i < nodes.Length; i++)
             {
-                nodes[i].standardTower = Instantiate(towerPrefabs[tower.Towertype], tower.TowerPosition, Quaternion.identity);
-                break;
+                if(nodes[i].GetNodePosition() == tower.TowerPosition)
+                {
+                    GameObject nodeTower = Instantiate(towerPrefabs[tower.Towertype], tower.TowerPosition, Quaternion.identity);
+                    nodes[i].standardTower = nodeTower;
+                    print("저장된 타워 생성");
+                    break;
+                }
             }
             
             //for (int i = 0; i < nodes.Length; i++)

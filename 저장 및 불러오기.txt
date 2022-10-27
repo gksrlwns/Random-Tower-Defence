@@ -20,3 +20,6 @@ https://velog.io/@kaka0804/%EC%9C%A0%EB%8B%88%ED%8B%B0-json%EC%9D%84-%EC%9D%B4%E
 
 
 업그레이드를 위한 각 타워의 List<T>, 타워 갯수를 세기위해 Instantiate node에 초기화
+
+https://www.remove.bg/ko
+배경제거 홈페이지

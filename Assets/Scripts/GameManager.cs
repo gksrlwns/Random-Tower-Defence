@@ -101,14 +101,11 @@ public class GameManager : MonoBehaviour
         isStageClear = true;
         isGameEnd = false;
         isPause = false;
-        _stageEnum = StageEnum.stage1;
-        print($"{(int)_stageEnum}");
         for (int i = 0; i < nodes.Length; i++)
         {
             nodes[i].enabled = false;
         }
         BackEndManager.instance.SaveFile();
-
     }
 
     // Update is called once per frame
@@ -132,7 +129,6 @@ public class GameManager : MonoBehaviour
                 if (clearMonsterNum >= maxMonsterNum)
                 {
                     isStageClear = true;
-                    
                     _stageEnum++;
                     StageTimer = 0;
                     clearMonsterNum = 0;
@@ -147,7 +143,6 @@ public class GameManager : MonoBehaviour
             if (_stageEnum == StageEnum.clear)
             {
                 GameEnd();
-                
             }
             
         }
@@ -233,12 +228,10 @@ public class GameManager : MonoBehaviour
             if(nodes[i].standardTower)
             {
                 towerCount++;
-            }
-            if(nodes[i].upgradeTower)
-            {
-                tower2Count++;
+                print(i);
             }
         }
+        print(towerCount);
     }
 
     public void TowerCreate()
