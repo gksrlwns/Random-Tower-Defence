@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
     {
         nodes = FindObjectsOfType<Node>();
         anim = PanelObj.GetComponent<Animation>();
-
+        
     }
     void Start()
     {

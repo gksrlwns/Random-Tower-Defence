@@ -62,6 +62,7 @@ public class BuildManager : MonoBehaviour
 
     private void Update()
     {
+
         for (int i = 0; i < towerTrs.Length; i++)
         {
             if (towerTrs[i].Count >= 3)
