@@ -14,6 +14,8 @@ public class BuildManager : MonoBehaviour
     //public static BuildManager instance;
     public GameObject[] towerPrefabs;
     public List<Vector3>[] towerTrs;
+    public GameObject createTowerEffect;
+    public Vector3 positionset;
     private GameManager _gameManager;
     private Node[] nodes;
 
@@ -87,6 +89,11 @@ public class BuildManager : MonoBehaviour
         node.standardTower = tower;
         node.towerTypeNum = (int)towerType;
         towerTrs[(int)towerType].Add(node.standardTower.transform.position);
+        if (towerTrs[(int)towerType].Count < 3)
+        {
+            GameObject createTowerEff = Instantiate(createTowerEffect, node.GetNodePosition() + positionset, node.transform.rotation);
+            Destroy(createTowerEff, 1f);
+        }
     }
 
     public void DemolishStandardTower(Node node)

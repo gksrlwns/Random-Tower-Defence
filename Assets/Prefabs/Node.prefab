@@ -107,11 +107,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-  tower: {fileID: 0}
-  tower2: {fileID: 0}
-  TowerPrefabs:
-  - {fileID: 1326093064322132, guid: a425124410f363a43adb6788601cc3e0, type: 3}
-  - {fileID: 1875090778556656, guid: 8fe963a2b177c0a4a8c06c915e9d81a1, type: 3}
-  gameManager: {fileID: 0}
-  TowerPosition: {x: 0, y: 0.5, z: 0}
-  nodeIndex: 0
+  standardTower: {fileID: 0}
+  upgradeTower: {fileID: 0}
+  _gameManager: {fileID: 0}
+  _buildManager: {fileID: 0}
+  positionOffset: {x: 0, y: 0.5, z: 0}
+  towerTypeNum: 0

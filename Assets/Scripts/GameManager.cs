@@ -59,11 +59,9 @@ public class GameManager : MonoBehaviour
     public Vector3 EnemyRotation;
     public Animation _ani;
     public Text restTimeText;
-    public Text stageTimeText;
     public Text moneyText;
     public Text restLifeText;
-    public Text gameOverText;
-    public Text gameEndText;
+    public Text currentStageText;
     public Sprite pauseImage;
     public Sprite resumeImage;
     public Sprite restImgae;
@@ -86,7 +84,6 @@ public class GameManager : MonoBehaviour
     {
         nodes = FindObjectsOfType<Node>();
         anim = PanelObj.GetComponent<Animation>();
-        
     }
     void Start()
     {
@@ -100,7 +97,7 @@ public class GameManager : MonoBehaviour
         isCreate = false;
         isStageClear = true;
         isGameEnd = false;
-        isPause = false;
+        //isPause = false;
         for (int i = 0; i < nodes.Length; i++)
         {
             nodes[i].enabled = false;
@@ -108,17 +105,9 @@ public class GameManager : MonoBehaviour
         BackEndManager.instance.SaveFile();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isGameEnd == true) return;
-        
-        if(isPause == true)
-        {
-            this.enabled = false;
-            return;
-        }
-        
         if (isStageClear == false)
         {
             StageTimer += Time.deltaTime;
@@ -133,7 +122,6 @@ public class GameManager : MonoBehaviour
                     StageTimer = 0;
                     clearMonsterNum = 0;
                     monsterNum = 0;
-                    stageTimeText.text = "";
                     spawnTimer = 0f;
                     PlayerDataSave();
                     BackEndManager.instance.SaveFile();
@@ -159,7 +147,8 @@ public class GameManager : MonoBehaviour
         }
         moneyText.text = money.ToString();
         restLifeText.text = $"{restLife.ToString()} / 20";
-        if(restLife == 0)
+        currentStageText.text = $"{(int)_stageEnum}";
+        if (restLife == 0)
         {
             GameOver();
         }
@@ -258,22 +247,22 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
-        isPause = !isPause;
-        if(isPause == true)
+        pausePanel.SetActive(!pausePanel.activeSelf);
+        if(pausePanel.activeSelf)
         {
-            pausePanel.SetActive(true);
+            Time.timeScale = 0f;
             puaseBtn.GetComponent<Image>().sprite = resumeImage;
         }
-        else if(isPause == false)
+        else
         {
-            pausePanel.SetActive(false);
+            Time.timeScale = 1f;
             puaseBtn.GetComponent<Image>().sprite = pauseImage;
-            this.enabled = true;
         }
     }
 
     public void Retry()
     {
+        Pause();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
