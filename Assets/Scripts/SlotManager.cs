@@ -22,6 +22,7 @@ public class SlotManager : MonoBehaviour
     bool[] isSlot = new bool[3];
     void Start()
     {
+        //타워 종류
         towerCount = new int[4];
         for (int i = 0; i < towerCount.Length; i++)
         {
@@ -63,6 +64,7 @@ public class SlotManager : MonoBehaviour
     {
         saveFilePanel.SetActive(false);
     }
+
     void ShowPlayerDataTexts(int num)
     {
         stageText[num].text = $"현재 스테이지 : " + BackEndManager.instance.nowPlayerData.stage.ToString();

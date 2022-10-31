@@ -15,7 +15,9 @@ public class BuildManager : MonoBehaviour
     public GameObject[] towerPrefabs;
     public List<Vector3>[] towerTrs;
     public GameObject createTowerEffect;
-    public Vector3 positionset;
+    public GameObject upgradeTowerEffect;
+    public Vector3 buildEffectPositionOffset;
+    public Vector3 upgradeEffectPositionOffset;
     private GameManager _gameManager;
     private Node[] nodes;
 
@@ -91,7 +93,7 @@ public class BuildManager : MonoBehaviour
         towerTrs[(int)towerType].Add(node.standardTower.transform.position);
         if (towerTrs[(int)towerType].Count < 3)
         {
-            GameObject createTowerEff = Instantiate(createTowerEffect, node.GetNodePosition() + positionset, node.transform.rotation);
+            GameObject createTowerEff = Instantiate(createTowerEffect, node.GetNodePosition() + buildEffectPositionOffset, node.transform.rotation);
             Destroy(createTowerEff, 1f);
         }
     }
@@ -126,6 +128,7 @@ public class BuildManager : MonoBehaviour
 
         }
         GameObject upgradeTower = Instantiate(towerPrefab, towerTrs[0], Quaternion.identity);
+        
         for (int i = 0; i < nodes.Length; i++)
         {
             if(nodes[i].GetNodePosition() == towerTrs[0])
@@ -134,6 +137,8 @@ public class BuildManager : MonoBehaviour
                 nodes[i].towerTypeNum = num;
             }
         }
+        var upgradeTowerEff = Instantiate(upgradeTowerEffect, towerTrs[0] + upgradeEffectPositionOffset, Quaternion.identity);
+        Destroy(upgradeTowerEff, 2f);
         towerTrs.Clear();
     }
 

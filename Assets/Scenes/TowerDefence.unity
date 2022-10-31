@@ -4162,7 +4162,10 @@ MonoBehaviour:
   - {fileID: 1582112111176492, guid: d1b1882db25d6fc4f8ff52b752db2e26, type: 3}
   createTowerEffect: {fileID: 903065387538202941, guid: f03f24f8fc6719d4b9e76d0a02d87f7c,
     type: 3}
-  positionset: {x: -2, y: 0.5, z: 0}
+  upgradeTowerEffect: {fileID: 7653634769896156837, guid: 40f6b5ff0eb73f141b55077830ec517a,
+    type: 3}
+  buildEffectPositionOffset: {x: -2, y: 0, z: 0}
+  upgradeEffectPositionOffset: {x: 0, y: 7, z: 0}
 --- !u!4 &520328519 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9069115365609054727, guid: 60f79905accf3b24fa0114b941f1aac0,
