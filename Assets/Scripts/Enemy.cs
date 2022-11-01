@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     
     public float timer;
     public float speed = 10f;
+    public bool hpHit;
     private GameManager _gameManager;
     private Transform target;
     private int wavePointIndex = 0;
@@ -17,6 +18,7 @@ public class Enemy : MonoBehaviour
     //public Canvas hpCanvas;
     public GameObject enemyRt;
     public Image healthBar;
+    public Image BackhealthBar;
     public float hp; // 300
     public int moneyToClear;
     private float startHp;
@@ -29,6 +31,7 @@ public class Enemy : MonoBehaviour
     {
         startHp = hp;
         target = WayPoint.wayPoints[0];
+        hpHit = false;
     }
     protected void OnDestroy()
     {
@@ -44,6 +47,25 @@ public class Enemy : MonoBehaviour
         if (_gameManager.isGameEnd == true) return;
         dir = target.position - transform.position;
         transform.Translate(dir.normalized* Time.deltaTime * speed, Space.World);
+
+        healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, hp / startHp, Time.deltaTime * 5f);
+
+        if(hpHit)
+        {
+            BackhealthBar.fillAmount = Mathf.Lerp(BackhealthBar.fillAmount, healthBar.fillAmount, Time.deltaTime * 10f);//hp/startHp;
+            if (healthBar.fillAmount >= BackhealthBar.fillAmount - 0.01f)
+            {
+                hpHit = false;
+                BackhealthBar.fillAmount = healthBar.fillAmount;
+            }
+        }
+        if (hp <= 0)
+        {
+            //처치 보상
+            _gameManager.money += moneyToClear;
+            //몬스터 삭제
+            Destroy(this.gameObject);
+        }
         //if(Vector3.Distance(transform.position, target.position) <= 0.2f)
         //{
         //    GetNextWayPoint();
@@ -85,13 +107,10 @@ public class Enemy : MonoBehaviour
     public void Damaged(int damage)
     {
         hp -= damage;
-        healthBar.fillAmount = hp/startHp;
-        if (hp <= 0)
-        {
-            //처치 보상
-            _gameManager.money += moneyToClear;
-            //몬스터 삭제
-            Destroy(this.gameObject);
-        }
+        Invoke("BackHpHit", 0.5f);
+    }
+    void BackHpHit()
+    {
+        hpHit = true;
     }
 }
