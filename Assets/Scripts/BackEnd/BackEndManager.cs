@@ -59,8 +59,13 @@ public class BackEndManager : MonoBehaviour
     }
     public void ClearFile()
     {
-        nowSlot = -1;
+        //nowSlot = -1;
         nowPlayerData = new PlayerData();
+    }
+
+    public void DeleteFile()
+    {
+        File.Delete(path + nowSlot.ToString());
     }
 
 }

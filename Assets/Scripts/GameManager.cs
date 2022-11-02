@@ -87,6 +87,8 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        Time.timeScale = 1f;
+        isPause = false;
         isPannelMove = false;
         monsterNum = 0;
         money = BackEndManager.instance.nowPlayerData.money;
@@ -248,7 +250,7 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         pausePanel.SetActive(!pausePanel.activeSelf);
-        if(pausePanel.activeSelf)
+        if (pausePanel.activeSelf)
         {
             Time.timeScale = 0f;
             puaseBtn.GetComponent<Image>().sprite = resumeImage;
