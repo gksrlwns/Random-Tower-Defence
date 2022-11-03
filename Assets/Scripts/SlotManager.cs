@@ -57,23 +57,31 @@ public class SlotManager : MonoBehaviour
             return;
         }
         print(BackEndManager.instance.nowSlot);
-        for (int i = 0; i < isSlot.Length; i++)
+        if(BackEndManager.instance.nowSlot < 1)
         {
-            if (File.Exists(BackEndManager.instance.path + $"{i}") == true)
-            {
-                isSlot[i] = true;
-                BackEndManager.instance.nowSlot = i;
-                BackEndManager.instance.LoadFile();
-                playerDataObj[i].SetActive(true);
-                slotText[i].text = "";
-                ShowPlayerDataTexts(i);
-            }
-            else
-            {
-                slotText[i].text = "비어있음";
-            }
-            BackEndManager.instance.ClearFile();
+
         }
+        //for (int i = 0; i < towerCount.Length; i++)
+        //{
+        //    towerCount[i] = 0;
+        //}
+        //for (int i = 0; i < isSlot.Length; i++)
+        //{
+        //    if (File.Exists(BackEndManager.instance.path + $"{i}") == true)
+        //    {
+        //        isSlot[i] = true;
+        //        BackEndManager.instance.nowSlot = i;
+        //        BackEndManager.instance.LoadFile();
+        //        playerDataObj[i].SetActive(true);
+        //        slotText[i].text = "";
+        //        ShowPlayerDataTexts(i);
+        //    }
+        //    else
+        //    {
+        //        slotText[i].text = "비어있음";
+        //    }
+        //    BackEndManager.instance.ClearFile();
+        //}
     }
     public void Slot(int num)
     {
