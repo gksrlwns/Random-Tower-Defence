@@ -26,62 +26,14 @@ public class SlotManager : MonoBehaviour
         //타워 종류
         towerCount = new int[4];
         isInit = false;
-        for (int i = 0; i < towerCount.Length; i++)
-        {
-            towerCount[i] = 0;
-        }
-        for (int i = 0; i < isSlot.Length; i++)
-        {
-            if (File.Exists(BackEndManager.instance.path + $"{i}") == true)
-            {
-                isSlot[i] = true;
-                BackEndManager.instance.nowSlot = i;
-                BackEndManager.instance.LoadFile();
-                playerDataObj[i].SetActive(true);
-                slotText[i].text = "";
-                ShowPlayerDataTexts(i);
-            }
-            else
-            {
-                slotText[i].text = "비어있음";
-            }
-            BackEndManager.instance.ClearFile();
-        }
+        Init();
+        BackEndManager.instance.nowSlot = -1;
+
     }
 
     private void Update()
     {
-        if (isInit == true)
-        {
-            BackEndManager.instance.ClearFile();
-            return;
-        }
         print(BackEndManager.instance.nowSlot);
-        if(BackEndManager.instance.nowSlot < 1)
-        {
-
-        }
-        //for (int i = 0; i < towerCount.Length; i++)
-        //{
-        //    towerCount[i] = 0;
-        //}
-        //for (int i = 0; i < isSlot.Length; i++)
-        //{
-        //    if (File.Exists(BackEndManager.instance.path + $"{i}") == true)
-        //    {
-        //        isSlot[i] = true;
-        //        BackEndManager.instance.nowSlot = i;
-        //        BackEndManager.instance.LoadFile();
-        //        playerDataObj[i].SetActive(true);
-        //        slotText[i].text = "";
-        //        ShowPlayerDataTexts(i);
-        //    }
-        //    else
-        //    {
-        //        slotText[i].text = "비어있음";
-        //    }
-        //    BackEndManager.instance.ClearFile();
-        //}
     }
     public void Slot(int num)
     {
@@ -111,7 +63,9 @@ public class SlotManager : MonoBehaviour
         {
             playerDataObj[BackEndManager.instance.nowSlot].SetActive(false);
             slotText[BackEndManager.instance.nowSlot].text = "비어있음";
+            isSlot[BackEndManager.instance.nowSlot] = false;
             BackEndManager.instance.DeleteFile();
+            Init();
         }
     }
 
@@ -119,12 +73,17 @@ public class SlotManager : MonoBehaviour
     {
         isInit = !isInit;
         saveFilePanel.SetActive(false);
-
     }
 
     void ShowPlayerDataTexts(int num)
     {
         if (!BackEndManager.instance) return;
+        if(BackEndManager.instance.nowPlayerData.stage == 4)
+        {
+            slotText[num].text = "Clear";
+            playerDataObj[num].SetActive(false);
+            return;
+        }
         stageText[num].text = $"현재 스테이지 : " + BackEndManager.instance.nowPlayerData.stage.ToString();
         restLifeText[num].text = $"남은 목숨 : " + BackEndManager.instance.nowPlayerData.restLife.ToString();
         restMoneyText[num].text = $"남은 돈 : " + BackEndManager.instance.nowPlayerData.money.ToString();
@@ -146,5 +105,30 @@ public class SlotManager : MonoBehaviour
     {
         isInit = !isInit;
         SceneManager.LoadScene(1);
+    }
+
+    void Init()
+    {
+        for (int i = 0; i < towerCount.Length; i++)
+        {
+            towerCount[i] = 0;
+        }
+        for (int i = 0; i < isSlot.Length; i++)
+        {
+            if (File.Exists(BackEndManager.instance.path + $"{i}") == true)
+            {
+                isSlot[i] = true;
+                BackEndManager.instance.nowSlot = i;
+                BackEndManager.instance.LoadFile();
+                playerDataObj[i].SetActive(true);
+                slotText[i].text = "";
+                ShowPlayerDataTexts(i);
+            }
+            else
+            {
+                slotText[i].text = "비어있음";
+            }
+            BackEndManager.instance.ClearFile();
+        }
     }
 }
