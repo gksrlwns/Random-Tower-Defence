@@ -35,6 +35,7 @@ public class Tower : MonoBehaviour
     protected GameManager _gameManager;
     public List<Enemy> enemiesList;
     private Transform lockOnTr;
+    bool isAttack;
     public TowerType type = TowerType.MachineGunTower;
     public enum TowerType
     {
@@ -51,7 +52,7 @@ public class Tower : MonoBehaviour
     protected void Start()
     {
         timer = 0f;
-        target = GetComponent<Transform>();
+        //target = GetComponent<Transform>();
         rotateSpeed = 60f;
         //range = 12f;
         //turnSpeed = 10f;
@@ -63,15 +64,19 @@ public class Tower : MonoBehaviour
         if (_gameManager.isPause == true) return;
         if (_gameManager.isGameEnd == true) return;
         timer += Time.deltaTime;
-        
         TargetSearch();
+        if (isAttack) return;
         TowerRotation();
 
-        if(target)
+        if (target)
         {
+            float distanceTotarget = Vector3.Distance(transform.position, target.position);
+            if (distanceTotarget > attackRange)
+                target = null;
             if (timer >= attackSpeed)//0.5f
             {
                 timer = 0f;
+                isAttack = true;
                 Shoot(target);
             }
         }
@@ -81,6 +86,7 @@ public class Tower : MonoBehaviour
     void TargetSearch()
     {
         //foreach문은 업데이트 함수에서 사용하지 않는게 좋다.
+        if (target) return;
         Collider[] colliders = Physics.OverlapSphere(transform.position, attackRange);
         float shortesDistance = Mathf.Infinity;
         GameObject nearEnemy = null;
@@ -112,7 +118,7 @@ public class Tower : MonoBehaviour
 
 
         // 가까운 적 + 범위 안 **추가로 적이 죽지않았는지에 대한 bool 값으로 때리던 적 유지?
-        if (nearEnemy && shortesDistance <= attackRange) 
+        if (nearEnemy &&  shortesDistance <= attackRange) 
         {
             target = nearEnemy.transform;
         }
@@ -120,10 +126,6 @@ public class Tower : MonoBehaviour
         {
             target = null;
         }
-        //else
-        //{
-        //    target = null;
-        //}
     }
 
     void TowerRotation()
@@ -158,6 +160,7 @@ public class Tower : MonoBehaviour
             Bullet bullet = bulletClone.GetComponent<Bullet>();
             bullet.Seek(attack);
             bullet.Damege(damage);
+            isAttack = false;
         }
         else if(type == TowerType.MachineGunTower)
         {
@@ -168,8 +171,8 @@ public class Tower : MonoBehaviour
             bullet.Seek(attack);
             bullet.Damege(damage);
         }
-        
 
+        isAttack = false;
 
         //Vector3 dir = target.position - bulletShootTr.transform.position;
         //float speed = 70f * Time.deltaTime;

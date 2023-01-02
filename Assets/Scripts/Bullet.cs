@@ -20,11 +20,11 @@ public class Bullet : MonoBehaviour
             isLockOn = true;
         }
 
-        if (type == Tower.TowerType.MachineGunTower)
-        {
-            Vector3 dir = target.position - transform.position;
-            transform.rotation = Quaternion.LookRotation(dir);
-        }
+        //if (type == Tower.TowerType.MachineGunTower)
+        //{
+        //    Vector3 dir = target.position - transform.position;
+        //    transform.rotation = Quaternion.LookRotation(dir);
+        //}
     }
 
     // Update is called once per frame

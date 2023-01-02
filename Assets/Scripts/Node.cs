@@ -41,6 +41,7 @@ public class Node : MonoBehaviour
         
         if (standardTower && _gameManager.isCreate == true)
         {
+            StartCoroutine("logTxt", "타워가 있습니다");
             print("타워가 있습니다");
             return;
         }
@@ -67,7 +68,7 @@ public class Node : MonoBehaviour
         }
         if(!standardTower && _gameManager.isCreate == true && _gameManager.money < 50)
         {
-            print("돈이 부족합니다.");
+            StartCoroutine("logTxt", "돈이 부족합니다");
         }
         if (standardTower && _gameManager.isDelete == true)
         {
@@ -78,6 +79,12 @@ public class Node : MonoBehaviour
         }
 
 
+    }
+    IEnumerator logTxt(string txt)
+    {
+        _gameManager.logText.text = txt;
+        yield return new WaitForSeconds(1f);
+        _gameManager.logText.text = "";
     }
     private void OnMouseExit()
     {
