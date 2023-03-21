@@ -5,7 +5,7 @@ using UnityEngine;
 public class Node : MonoBehaviour
 {
     private Renderer rend;
-    public Color hoverColor;
+    public Color selectedColor;
     private Color startColor;
     public GameObject standardTower;
     public GameObject upgradeTower;
@@ -30,7 +30,7 @@ public class Node : MonoBehaviour
     private void OnMouseEnter()
     {
         if (!rend) return;
-        rend.material.color = hoverColor;
+        rend.material.color = selectedColor;
     }
     private void OnMouseDown()
     {
@@ -44,15 +44,8 @@ public class Node : MonoBehaviour
             print("타워가 있습니다");
             return;
         }
-        
-        //if (upgradeTower && _gameManager.isCreate == true)
-        //{
-        //    print("업그레이드된 타워가 있습니다");
-        //    return;
-        //}
         if (!standardTower && _gameManager.isCreate == true && _gameManager.money >= 50)
         {
-            //RandomPrefabs();
             _buildManager.BuildStandardTower(this);
             if(towerType == Tower.TowerType.CannonTower)
             {

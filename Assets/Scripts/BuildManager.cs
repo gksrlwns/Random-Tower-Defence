@@ -11,7 +11,6 @@ using UnityEngine;
 
 public class BuildManager : MonoBehaviour
 {
-    //public static BuildManager instance;
     public GameObject[] towerPrefabs;
     public List<Vector3>[] towerTrs;
     public GameObject createTowerEffect;
@@ -55,27 +54,48 @@ public class BuildManager : MonoBehaviour
                     break;
                 }
             }
-            
-            //for (int i = 0; i < nodes.Length; i++)
-            //{
-            //    if (nodes[i].standardTower) return;
-            //    //nodes[i].standardTower = Instantiate(towerPrefabs[tower.Towertype], tower.TowerPosition, Quaternion.identity);
-            //}
         }
     }
 
     private void Update()
     {
-
-        for (int i = 0; i < towerTrs.Length; i++)
+        if(towerTrs[0].Count >= 3)
         {
-            if (towerTrs[i].Count >= 3)
-            {
-                Debug.Log($"{((TowerName)i)} 3개 삭제 후 업그레이드");
-                TowerUpgrade(towerPrefabs[i+2], towerTrs[i], i);
-            }
+            Debug.Log($"{((TowerName)0)} 3개 삭제 후 업그레이드");
+            TowerUpgrade(towerPrefabs[2], towerTrs[0], 0);
+        }
+        if (towerTrs[1].Count >= 3)
+        {
+            Debug.Log($"{((TowerName)1)} 3개 삭제 후 업그레이드");
+            TowerUpgrade(towerPrefabs[3], towerTrs[1], 1);
         }
     }
+    void TowerUpgrade(GameObject towerPrefab, List<Vector3> towerTrs, int num)
+    {
+        num += 2;
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if (nodes[i].GetNodePosition() == towerTrs[0]) Destroy(nodes[i].standardTower);
+            if (nodes[i].GetNodePosition() == towerTrs[1]) Destroy(nodes[i].standardTower);
+            if (nodes[i].GetNodePosition() == towerTrs[2]) Destroy(nodes[i].standardTower);
+
+
+        }
+        GameObject upgradeTower = Instantiate(towerPrefab, towerTrs[0], Quaternion.identity);
+
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if (nodes[i].GetNodePosition() == towerTrs[0])
+            {
+                nodes[i].standardTower = upgradeTower;
+                nodes[i].towerTypeNum = num;
+            }
+        }
+        var upgradeTowerEff = Instantiate(upgradeTowerEffect, towerTrs[0] + upgradeEffectPositionOffset, Quaternion.identity);
+        Destroy(upgradeTowerEff, 2f);
+        towerTrs.Clear();
+    }
+
     public void BuildStandardTower(Node node)
     {
         RandomPrefabs();
@@ -97,7 +117,7 @@ public class BuildManager : MonoBehaviour
             Destroy(createTowerEff, 1f);
         }
     }
-
+    
     public void DemolishStandardTower(Node node)
     {
         towerTrs[(int)towerType].Remove(node.standardTower.transform.position);
@@ -106,40 +126,6 @@ public class BuildManager : MonoBehaviour
     void RandomPrefabs()
     {
         towerType = (Tower.TowerType)Random.Range(0, towerPrefabs.Length - 2);
-        //return TowerKindNum;
-    }
-    void TowerUpgrade(GameObject towerPrefab, List<Vector3> towerTrs, int num)
-    {
-        num += 2;
-        for (int i = 0; i < nodes.Length; i++)
-        {
-            if(nodes[i].GetNodePosition() == towerTrs[0])
-            {
-                Destroy(nodes[i].standardTower);
-            }
-            if (nodes[i].GetNodePosition() == towerTrs[1])
-            {
-                Destroy(nodes[i].standardTower);
-            }
-            if (nodes[i].GetNodePosition() == towerTrs[2])
-            {
-                Destroy(nodes[i].standardTower);
-            }
-
-        }
-        GameObject upgradeTower = Instantiate(towerPrefab, towerTrs[0], Quaternion.identity);
-        
-        for (int i = 0; i < nodes.Length; i++)
-        {
-            if(nodes[i].GetNodePosition() == towerTrs[0])
-            {
-                nodes[i].standardTower = upgradeTower;
-                nodes[i].towerTypeNum = num;
-            }
-        }
-        var upgradeTowerEff = Instantiate(upgradeTowerEffect, towerTrs[0] + upgradeEffectPositionOffset, Quaternion.identity);
-        Destroy(upgradeTowerEff, 2f);
-        towerTrs.Clear();
     }
 
 }

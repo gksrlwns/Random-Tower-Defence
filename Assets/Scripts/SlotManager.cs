@@ -57,10 +57,10 @@ public class SlotManager : MonoBehaviour
             return;
         }
         print(BackEndManager.instance.nowSlot);
-        if(BackEndManager.instance.nowSlot < 1)
-        {
+        //if(BackEndManager.instance.nowSlot < 1)
+        //{
 
-        }
+        //}
         //for (int i = 0; i < towerCount.Length; i++)
         //{
         //    towerCount[i] = 0;
@@ -83,45 +83,6 @@ public class SlotManager : MonoBehaviour
         //    BackEndManager.instance.ClearFile();
         //}
     }
-    public void Slot(int num)
-    {
-        BackEndManager.instance.nowSlot = num;
-        if(!isSlot[num])
-        {
-            GoGameScene();
-        }
-        
-    }
-
-    public void SlotLoad()
-    {
-        if(isSlot[BackEndManager.instance.nowSlot])
-        {
-            BackEndManager.instance.LoadFile();
-            GoGameScene();
-        }
-        else
-        {
-            GoGameScene();
-        }
-    }
-    public void SlotDelete()
-    {
-        if (isSlot[BackEndManager.instance.nowSlot])
-        {
-            playerDataObj[BackEndManager.instance.nowSlot].SetActive(false);
-            slotText[BackEndManager.instance.nowSlot].text = "비어있음";
-            BackEndManager.instance.DeleteFile();
-        }
-    }
-
-    public void Back()
-    {
-        isInit = !isInit;
-        saveFilePanel.SetActive(false);
-
-    }
-
     void ShowPlayerDataTexts(int num)
     {
         if (!BackEndManager.instance) return;
@@ -141,6 +102,36 @@ public class SlotManager : MonoBehaviour
                 towerCountText[(num * 4) + tower.Towertype].text = towerCount[tower.Towertype].ToString();
             }
         }
+    }
+    public void Slot(int num)
+    {
+        BackEndManager.instance.nowSlot = num;
+        if (!isSlot[num]) GoGameScene();
+    }
+    public void SlotLoad()
+    {
+        if(isSlot[BackEndManager.instance.nowSlot])
+        {
+            BackEndManager.instance.LoadFile();
+            GoGameScene();
+        }
+        else 
+            GoGameScene();
+    }
+    public void SlotDelete()
+    {
+        if (isSlot[BackEndManager.instance.nowSlot])
+        {
+            playerDataObj[BackEndManager.instance.nowSlot].SetActive(false);
+            slotText[BackEndManager.instance.nowSlot].text = "비어있음";
+            BackEndManager.instance.DeleteFile();
+        }
+    }
+    public void Back()
+    {
+        isInit = !isInit;
+        saveFilePanel.SetActive(false);
+
     }
     void GoGameScene()
     {

@@ -30,19 +30,15 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         if (type == Tower.TowerType.CannonTower)
         {
-            //if(!target)
             if (isLockOn)
             {
                 if (!target) return;
                 Vector3 Vo = CalculateCatapult(target.transform.position, transform.position, 1);
-
                 transform.GetComponent<Rigidbody>().velocity = Vo;
                 isLockOn = false;
             }
-            //transform.Translate(dir.normalized * 10f * Time.deltaTime, Space.World);
         }
         else if (type == Tower.TowerType.MachineGunTower)
         {
@@ -96,9 +92,7 @@ public class Bullet : MonoBehaviour
     //반드시 9.8일 필요는 없고 실제 게임에서 자연스럽게 보이는 값을 지정.
     //특정시간은 t의 값에 그 시간을 넣고 x,y,z를 최종위치값으로 넣어서
     //V값을 역산해 결정한 다음매 프레임마다 t값을 갱신해 가면서 x, y, z를 구하시면 됨
-    
-
-
+   
     }
 
 

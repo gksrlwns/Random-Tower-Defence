@@ -18,15 +18,15 @@ public enum TowerName
 
 public class Tower : MonoBehaviour
 {
-    
     [Header("타워 능력")]
     public float rotateSpeed;
     public float attackRange; //타워의 사거리
     public float turnSpeed;// 10f
     public float attackSpeed;
     public int damage;
-
     public float timer;
+
+
     public Transform target; //타워의 타겟
     public Transform TowerRotateTr;
     public GameObject bulletPrefab;//총알프리펩
@@ -34,8 +34,9 @@ public class Tower : MonoBehaviour
     public Transform bulletShootTr; //총알 생성 위치
     protected GameManager _gameManager;
     public List<Enemy> enemiesList;
-    private Transform lockOnTr;
     public TowerType type = TowerType.MachineGunTower;
+    //private Transform lockOnTr;
+
     public enum TowerType
     {
         CannonTower = 0,
@@ -44,11 +45,11 @@ public class Tower : MonoBehaviour
     }
 
 
-    protected void Awake()
+    private void Awake()
     {
         _gameManager = FindObjectOfType<GameManager>();
     }
-    protected void Start()
+    private void Start()
     {
         timer = 0f;
         target = GetComponent<Transform>();
@@ -58,7 +59,7 @@ public class Tower : MonoBehaviour
     }
 
     // Update is called once per frame
-    protected void Update()
+    private void Update()
     {
         if (_gameManager.isPause == true) return;
         if (_gameManager.isGameEnd == true) return;
@@ -75,12 +76,9 @@ public class Tower : MonoBehaviour
                 Shoot(target);
             }
         }
-
-
     }
     void TargetSearch()
     {
-        //foreach문은 업데이트 함수에서 사용하지 않는게 좋다.
         Collider[] colliders = Physics.OverlapSphere(transform.position, attackRange);
         float shortesDistance = Mathf.Infinity;
         GameObject nearEnemy = null;
@@ -96,6 +94,11 @@ public class Tower : MonoBehaviour
                 }
             }
         }
+        // 가까운 적 + 범위 안 때리던 적 유지
+        if (nearEnemy && shortesDistance <= attackRange)
+            target = nearEnemy.transform;
+        else
+            target = null;
         //Enemy[] enemies = FindObjectsOfType<Enemy>();
 
         //enemiesList
@@ -111,15 +114,7 @@ public class Tower : MonoBehaviour
         //}
 
 
-        // 가까운 적 + 범위 안 **추가로 적이 죽지않았는지에 대한 bool 값으로 때리던 적 유지?
-        if (nearEnemy && shortesDistance <= attackRange) 
-        {
-            target = nearEnemy.transform;
-        }
-        else
-        {
-            target = null;
-        }
+
         //else
         //{
         //    target = null;

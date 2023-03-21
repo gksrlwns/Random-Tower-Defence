@@ -101,7 +101,6 @@ public class Enemy : MonoBehaviour
         if (wavePointIndex > WayPoint.wayPoints.Length) return;
         target = WayPoint.wayPoints[wavePointIndex];
         enemyRt.transform.Rotate(_gameManager.EnemyRotation);
-        //hpCanvas.transform.Rotate(_gameManager.EnemyRotation);
     }
 
     public void Damaged(int damage)
