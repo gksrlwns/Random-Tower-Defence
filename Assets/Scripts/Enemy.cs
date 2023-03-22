@@ -48,9 +48,10 @@ public class Enemy : MonoBehaviour
         dir = target.position - transform.position;
         transform.Translate(dir.normalized* Time.deltaTime * speed, Space.World);
 
-        healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, hp / startHp, Time.deltaTime * 5f);
+        //healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, hp / startHp, Time.deltaTime * 5f);
+        healthBar.fillAmount = hp / startHp;
 
-        if(hpHit)
+        if (hpHit)
         {
             BackhealthBar.fillAmount = Mathf.Lerp(BackhealthBar.fillAmount, healthBar.fillAmount, Time.deltaTime * 10f);//hp/startHp;
             if (healthBar.fillAmount >= BackhealthBar.fillAmount - 0.01f)

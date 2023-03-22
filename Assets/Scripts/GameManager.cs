@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
     public Text moneyText;
     public Text restLifeText;
     public Text currentStageText;
+    public Text logText;
     public Sprite pauseImage;
     public Sprite resumeImage;
     public Sprite restImgae;
